@@ -1,16 +1,17 @@
-import { View } from "react-native"
+import { View, StyleSheet } from "react-native"
 import { useState, useEffect } from "react";
-import { Text } from "react-native-paper";
+import { Card, Divider, Surface, Text } from "react-native-paper";
 import * as Location from "expo-location"
 import { WeatherCard } from "../components/WeatherCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WeatherView } from "../components/WeatherView";
 
-export const HomeScreen = () => {
-    const [location, setLocation] = useState(null);
+export const HomeScreen = ({navigation}) => {
+    const [location, setLocation] = useState();
     const [errorMsg, setErrorMsg] = useState(null);
     const [city, setCity] = useState();
-    const [weather, setWeather] = useState(null)
+    const [country, setCountry] = useState();
+    const [weather, setWeather] = useState()
 
     useEffect(() => {
         (async () => {
@@ -20,10 +21,10 @@ export const HomeScreen = () => {
                 setErrorMsg('Permission to access location was denied');
                 return;
             }
-        
             //let location = await Location.getCurrentPositionAsync({});
-            setLocation({coords:{latitude:43.44, longitude:-63.44}})
-            setCity("Halifax")
+            setLocation({latitude:43.44, longitude:-63.44})
+            setCity("Berlin")
+            setCountry("Germany")
             /*setTimeout(async () => {
                 let geocode = await Location.reverseGeocodeAsync({
                     latitude: location.coords.latitude,
@@ -40,10 +41,50 @@ export const HomeScreen = () => {
       }, []);
 
     return (
-        <SafeAreaView>
-            {location &&
-                <WeatherView lat={location.coords.latitude} long ={location.coords.longitude} city={city}/>
-            }
-        </SafeAreaView>
+        <>
+        {location ? 
+        <WeatherView city={city} country={country} long={location.longitude} lat={location.latitude}/> 
+        : <></>}
+        </>
+        // <View style={{ flex: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>
+        //     {location &&
+        //         <WeatherCard coords={location.coords} city={city} country={country} weatherData={{temp:-1, code:0}} style={{height:"60%"}}/>
+        //     }
+
+        //     <Surface style={{marginTop:-30, backgroundColor:"white", borderRadius:30, padding:20,  width:"100%", display:"flex", justifyContent:"space-around", flex:1, borderBottomStartRadius:0, borderBottomEndRadius:0}}>
+
+
+        //         <View style={styles.surface} >
+        //             <Text style={{color:"#cecece"}}> Percepitation </Text>
+        //             <Text style={{color:"#a3a3a3"}} variant="titleMedium">30%</Text>
+        //         </View>
+        //         <Divider/>
+        //         <View style={styles.surface}>
+        //             <Text style={{color:"#cecece"}}> Wind </Text>
+        //             <Text style={{color:"#a3a3a3"}} variant="titleMedium">22km/h</Text>
+        //         </View>
+        //         <Divider/>
+        //         <View style={styles.surface}>
+        //             <Text style={{color:"#cecece"}}> Humidity </Text>
+        //             <Text style={{color:"#a3a3a3"}} variant="titleMedium">50%</Text>
+        //         </View>
+
+        //     </Surface>
+        // </View>
     )
 }
+
+const styles = StyleSheet.create({
+    surface:{
+        // borderRadius:10,
+        margin:0,
+        padding:20,
+        width:"100%",
+        display:"flex",
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        // backgroundColor: "white"
+    }
+})
+

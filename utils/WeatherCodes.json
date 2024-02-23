@@ -1,0 +1,9 @@
+{
+    "0": {"desc":"Clear Skies"},
+    "1": {"desc":"Mainly Clear"},
+    "2": {"desc":"Partly Cloudy"},
+    "3": {"desc":"Overcast"},
+    "61": {"desc":"Slight Rain"},
+    "63":{"desc":"Moderate Rain"},
+    "65":{"desc":"Heavy Rain"}
+}
