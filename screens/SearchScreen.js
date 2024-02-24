@@ -17,7 +17,7 @@ const Search = ({navigation, route}) => {
 
     const initiateSearch = () => {
         setSearching(true)
-        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=en&format=json`).then(res=>res.json()).then(data => {setResults(data.results), setSearching(false)})
+        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=10&language=en&format=json`).then(res=>res?.json()).then(data => {setResults(data?.results?data.results:[]), setSearching(false)})
     }
 
     const handleCityPress = (cityInfo) => {
