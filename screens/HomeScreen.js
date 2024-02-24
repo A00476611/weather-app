@@ -2,6 +2,7 @@ import { View } from "react-native"
 import { useState, useEffect } from "react";
 import * as Location from "expo-location"
 import { WeatherView } from "../components/WeatherView";
+import { ActivityIndicator } from "react-native-paper";
 
 export const HomeScreen = ({navigation}) => {
     const [location, setLocation] = useState();
@@ -38,8 +39,11 @@ export const HomeScreen = ({navigation}) => {
     return (
         <>
         {location ? 
-        <WeatherView city={city} country={country} long={location.longitude} lat={location.latitude} /> 
-        : <></>}
+            <WeatherView city={city} country={country} long={location.longitude} lat={location.latitude} /> 
+        : 
+            <View style={{flex:1}}>
+                <ActivityIndicator style={{height:"100%"}}/>
+            </View>}
         </>
     )
 }

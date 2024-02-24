@@ -1,8 +1,6 @@
 import { Fragment, useContext, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, View } from "react-native"
 import { ActivityIndicator, Card, Divider, Icon, IconButton, Searchbar, Surface, Text } from "react-native-paper"
-import { SafeAreaView } from "react-native-safe-area-context"
-import testResults from "./devResults.json"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WeatherView } from "../components/WeatherView"
 import { DBContext } from "../useDB"

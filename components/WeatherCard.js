@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { Card, Icon, Surface, Text } from "react-native-paper"
-import { Pressable, StyleSheet, View } from "react-native"
+import { Icon, Text } from "react-native-paper"
+import { Pressable, View } from "react-native"
 import { LinearGradient } from "expo-linear-gradient"
 import weathercodes from "../utils/WeatherCodes.json"
 import { ColorSchemes } from "../utils/colorSchemes"

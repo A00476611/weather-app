@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { HomeScreen, SavedScreen, SearchScreen } from './screens';
 import { Icon } from 'react-native-paper';
-import { useEffect } from 'react';
 import {  DBContext, useDB } from './useDB';
 import { registerRootComponent } from 'expo';
 

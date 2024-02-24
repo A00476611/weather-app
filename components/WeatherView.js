@@ -1,15 +1,10 @@
-import { Icon, Surface, Text, ActivityIndicator, Divider, Avatar, TextInput, Searchbar, IconButton, Button } from "react-native-paper"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { Icon, Surface, Text, Divider, Button } from "react-native-paper"
 import { View, StyleSheet  } from "react-native"
 import { useState, useEffect, useContext } from "react"
 import weathercodes from "../utils/WeatherCodes.json"
 import { LinearGradient } from "expo-linear-gradient"
 import { DBContext } from "../useDB"
 import { ColorSchemes } from "../utils/colorSchemes"
-
-
-//const db = new DB()
-//const db = {insert:()=>{}}
 
 const sunny = {
     text:"#c7a94a",
@@ -18,7 +13,7 @@ const sunny = {
     gradient:['#ffefbe', '#ffe799']
 }
 
-export const WeatherView = ({long, lat, city, country, navigation}) => {
+export const WeatherView = ({long, lat, city, country}) => {
     const [weather, setWeather] = useState()
     const [colorScheme, setColorScheme] = useState(sunny)
     const db = useContext(DBContext)
@@ -97,13 +92,11 @@ const styles = StyleSheet.create({
         bottom:20,
         left:20,
         right:20,
-        // backgroundColor:"rgba(255,255,255,0.5)", 
         display:"flex",
         flexDirection:"row",
         justifyContent:"space-between"
     },
     surface:{
-        // borderRadius:10,
         margin:0,
         padding:20,
         width:"100%",
@@ -111,6 +104,5 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
-        // backgroundColor: "white"
     }
 })
