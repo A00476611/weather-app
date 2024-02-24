@@ -6,6 +6,10 @@ import { DBContext } from "../useDB"
 export const SavedScreen = () => {
     const {savedCities, remove} = useContext(DBContext)
 
+    useEffect(()=>{
+        console.log(savedCities)
+    }, [savedCities])
+
     return (
         <View style={{paddingHorizontal:20, flex:1, display:"flex", justifyContent:"space-around"}}>
             {savedCities.map((city,i) => (

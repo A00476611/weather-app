@@ -61,7 +61,8 @@ export const useDB = () => {
 
     const insert = ({name, longitude, latitude, country}) => {
         runQuery(`INSERT INTO saved_cities (name, longitude, latitude, country) VALUES ('${name}', ${longitude}, ${latitude}, '${country}');`).then(res=>{
-            setSavedCities(initial=>[...initial, {id:res.insertedId, name, longitude, latitude, country}])
+            console.log(res)
+            setSavedCities(initial=>[...initial, {id:res.insertId, name, longitude, latitude, country}])
         }).catch(err=> console.log(err))
     }
 

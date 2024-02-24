@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native"
+import { View } from "react-native"
 import { useState, useEffect } from "react";
 import * as Location from "expo-location"
 import { WeatherView } from "../components/WeatherView";
@@ -8,7 +8,6 @@ export const HomeScreen = ({navigation}) => {
     const [errorMsg, setErrorMsg] = useState(null);
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
-    const [weather, setWeather] = useState()
 
     useEffect(() => {
         (async () => {
@@ -39,23 +38,9 @@ export const HomeScreen = ({navigation}) => {
     return (
         <>
         {location ? 
-        <WeatherView city={city} country={country} long={location.longitude} lat={location.latitude}/> 
+        <WeatherView city={city} country={country} long={location.longitude} lat={location.latitude} /> 
         : <></>}
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    surface:{
-        // borderRadius:10,
-        margin:0,
-        padding:20,
-        width:"100%",
-        display:"flex",
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
-        // backgroundColor: "white"
-    }
-})
 

@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from "react"
 import weathercodes from "../utils/WeatherCodes.json"
 import { LinearGradient } from "expo-linear-gradient"
 import { DBContext } from "../useDB"
+import { ColorSchemes } from "../utils/colorSchemes"
 
 
 //const db = new DB()
@@ -18,25 +19,27 @@ const sunny = {
 }
 
 export const WeatherView = ({long, lat, city, country, navigation}) => {
-    const [weather, setWeather] = useState({temp:-1, code:0})
+    const [weather, setWeather] = useState()
     const [colorScheme, setColorScheme] = useState(sunny)
     const db = useContext(DBContext)
     
     useEffect(()=>{
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(2)}&longitude=${long.toFixed(2)}&current=temperature_120m,weathercode,wind_speed_120m,precipitation_probability,relative_humidity_2m`).then(res=> res.json()).then(({current}) => {
+            setColorScheme(ColorSchemes[weathercodes[current.weathercode].colorScheme])
             setWeather({temp: current.temperature_120m, code:current.weathercode, prec: current.precipitation_probability, wind: current.wind_speed_120m, humidity:current.relative_humidity_2m})
         }
         )
-        //setWeather({temp:"-1", code:"1"})
     },[lat,long])
 
 
     return (
         <View style={{ flex: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>
+            {weather && colorScheme &&
+            <>
             <Surface style={{borderRadius:0, width:"100%", overflow:"hidden", height:"60%"}} mode="flat" >
                 <LinearGradient colors={colorScheme.gradient} start={[0, 0]} end={[1, 1]} location={[0.25, 0.4, 1]} style={{padding:20, height:"100%", display:"flex", justifyContent:"center"}}>
                     <View style= {{display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"start"}}>
-                        <Icon source="weather-sunny" color={colorScheme.icon} size={100}/>
+                        <Icon source={weathercodes[weather.code].icon} color={colorScheme.icon} size={100}/>
                         <View style= {{display:"flex", alignItems:"flex-end"}}>
                             <Text variant="titleLarge" style={{color:colorScheme.text}}>{weathercodes[weather.code].desc}</Text>
                             <Text style={{color:colorScheme.text, fontSize:90}}>{weather.temp.toFixed(0)}°</Text>
@@ -64,7 +67,10 @@ export const WeatherView = ({long, lat, city, country, navigation}) => {
 
             </Surface>
             <Button icon="heart" style={{position:"absolute", top:20, right:20}} mode="elevated" textColor="green" onPress={e=>{db.insert({name:city, longitude:long, latitude:lat, country})}} disabled={db.savedCities.length >=4}> Save </Button>
+       </>
+             }
         </View>
+            
     )
 }
 
