@@ -1,24 +1,18 @@
 import { View } from "react-native"
-import { DB } from "../utils/Db"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { WeatherCard } from "../components/WeatherCard"
+import { DBContext } from "../useDB"
 
 export const SavedScreen = () => {
-    const [savedCites, setSavedCities] = useState([])
-    const db = new DB()
-    useEffect(()=>{
-        db.getAll((res) => {
-            console.log(res)
-            setSavedCities(res)
-        })
-    },[])
-
-    useEffect(()=>{
-        console.log(savedCites)
-    }, [savedCites])
+    const {savedCities, remove} = useContext(DBContext)
 
     return (
-        <View>
-            {savedCites.map((city,i) => <Text>{city.name}</Text>)}
+        <View style={{paddingHorizontal:20, flex:1, display:"flex", justifyContent:"space-around"}}>
+            {savedCities.map((city,i) => (
+                <View key={i}> 
+                    <WeatherCard lat={city.latitude} long={city.longitude} city={city.name} country={city.country} onHold={e=>remove(city.id)}/>
+                </View>
+            ))}
         </View>
     )
 }

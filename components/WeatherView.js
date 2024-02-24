@@ -1,13 +1,13 @@
 import { Icon, Surface, Text, ActivityIndicator, Divider, Avatar, TextInput, Searchbar, IconButton, Button } from "react-native-paper"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { View, StyleSheet  } from "react-native"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import weathercodes from "../utils/WeatherCodes.json"
 import { LinearGradient } from "expo-linear-gradient"
-import { DB } from "../utils/Db";
+import { DBContext } from "../useDB"
 
 
-const db = new DB()
+//const db = new DB()
 //const db = {insert:()=>{}}
 
 const sunny = {
@@ -20,13 +20,16 @@ const sunny = {
 export const WeatherView = ({long, lat, city, country, navigation}) => {
     const [weather, setWeather] = useState({temp:-1, code:0})
     const [colorScheme, setColorScheme] = useState(sunny)
+    const db = useContext(DBContext)
     
     useEffect(()=>{
-        // fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(2)}&longitude=${long.toFixed(2)}&current=temperature_120m,weathercode`).then(res=> res.json()).then(({current}) => 
-        //     setWeather({temp: current.temperature_120m, code:current.weathercode})
-        // )
-        setWeather({temp:"-1", code:"1"})
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(2)}&longitude=${long.toFixed(2)}&current=temperature_120m,weathercode,wind_speed_120m,precipitation_probability,relative_humidity_2m`).then(res=> res.json()).then(({current}) => {
+            setWeather({temp: current.temperature_120m, code:current.weathercode, prec: current.precipitation_probability, wind: current.wind_speed_120m, humidity:current.relative_humidity_2m})
+        }
+        )
+        //setWeather({temp:"-1", code:"1"})
     },[lat,long])
+
 
     return (
         <View style={{ flex: 1, display:"flex", flexDirection:"column", alignItems:"center" }}>
@@ -36,7 +39,7 @@ export const WeatherView = ({long, lat, city, country, navigation}) => {
                         <Icon source="weather-sunny" color={colorScheme.icon} size={100}/>
                         <View style= {{display:"flex", alignItems:"flex-end"}}>
                             <Text variant="titleLarge" style={{color:colorScheme.text}}>{weathercodes[weather.code].desc}</Text>
-                            <Text style={{color:colorScheme.text, fontSize:90}}>{weather.temp}°</Text>
+                            <Text style={{color:colorScheme.text, fontSize:90}}>{weather.temp.toFixed(0)}°</Text>
                             <Text variant="bodyLarge" style={{color:colorScheme.text}}>{city}, {country}</Text>
                         </View>
                     </View>
@@ -46,21 +49,21 @@ export const WeatherView = ({long, lat, city, country, navigation}) => {
             <Surface style={{marginTop:-30, backgroundColor:"white", borderRadius:30, padding:20,  width:"100%", display:"flex", justifyContent:"space-around", flex:1, borderBottomStartRadius:0, borderBottomEndRadius:0}}>
                 <View style={styles.surface} >
                     <Text style={{color:"#cecece"}}> Percepitation </Text>
-                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">30%</Text>
+                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">{weather.prec}%</Text>
                 </View>
                 <Divider/>
                 <View style={styles.surface}>
                     <Text style={{color:"#cecece"}}> Wind </Text>
-                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">22km/h</Text>
+                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">{weather.wind}km/h</Text>
                 </View>
                 <Divider/>
                 <View style={styles.surface}>
                     <Text style={{color:"#cecece"}}> Humidity </Text>
-                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">50%</Text>
+                    <Text style={{color:"#a3a3a3"}} variant="titleMedium">{weather.humidity}%</Text>
                 </View>
 
             </Surface>
-            <Button icon="heart" style={{position:"absolute", top:20, right:20}} mode="elevated" textColor="green" onPress={e=>{db.insert({name:city, longitude:long, latitude:lat})}}> Save </Button>
+            <Button icon="heart" style={{position:"absolute", top:20, right:20}} mode="elevated" textColor="green" onPress={e=>{db.insert({name:city, longitude:long, latitude:lat, country})}} disabled={db.savedCities.length >=4}> Save </Button>
         </View>
     )
 }

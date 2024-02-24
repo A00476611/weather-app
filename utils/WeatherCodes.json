@@ -3,7 +3,10 @@
     "1": {"desc":"Mainly Clear"},
     "2": {"desc":"Partly Cloudy"},
     "3": {"desc":"Overcast"},
-    "61": {"desc":"Slight Rain"},
-    "63":{"desc":"Moderate Rain"},
-    "65":{"desc":"Heavy Rain"}
+    "61": {"desc":"Slight Rain Fall"},
+    "63":{"desc":"Moderate Rain Fall"},
+    "65":{"desc":"Heavy Rain Fall"},
+    "80":{"desc":"Slight Rain Showers"},
+    "81":{"desc":"Moderate Rain Showers"},
+    "82":{"desc":"Heavy Rain Showers"}
 }

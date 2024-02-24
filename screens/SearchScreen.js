@@ -1,18 +1,21 @@
-import { Fragment, useState } from "react"
+import { Fragment, useContext, useState } from "react"
 import { Pressable, ScrollView, StyleSheet, View } from "react-native"
 import { ActivityIndicator, Card, Divider, Icon, IconButton, Searchbar, Surface, Text } from "react-native-paper"
 import { SafeAreaView } from "react-native-safe-area-context"
 import testResults from "./devResults.json"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { WeatherView } from "../components/WeatherView"
+import { DBContext } from "../useDB"
 
 
 const Stack = createNativeStackNavigator();
 
 const Search = ({navigation, route}) => {
     const [city, setCity] = useState("")
-    const [results, setResults] = useState(testResults.results)
+    const [results, setResults] = useState([])
     const [searching, setSearching] = useState(false)
+
+    const db = useContext(DBContext)
 
     const initiateSearch = () => {
         setSearching(true)
@@ -20,7 +23,6 @@ const Search = ({navigation, route}) => {
     }
 
     const handleCityPress = (cityInfo) => {
-        console.log(cityInfo)
         navigation.push('City Weather', cityInfo)
     }
     return (
@@ -35,7 +37,7 @@ const Search = ({navigation, route}) => {
                                     <Text style={{color:"#303345"}}  variant="titleMedium">{res.name}</Text>
                                     <Text style={{color:"#cecece"}}>{res.admin1}, {res.country}</Text>
                                 </View>
-                                <IconButton icon="heart-outline" size={15} color="#a3a3a3" onPress={(e)=>{console.log(e)}}/>
+                                <IconButton mode="contained" icon="heart-outline" size={15} color="#a3a3a3" onPress={e=>db.insert(res)} disabled={db.savedCities.length >= 4}/>
                             </Pressable>
                             <Divider/>
                         </Fragment>
@@ -50,7 +52,6 @@ const Search = ({navigation, route}) => {
 }
 
 const CityWeather = ({route, navigation}) => {
-    console.log(route.params)
     return (
         <WeatherView long={route.params.longitude} lat={route.params.latitude} city={route.params.name} country={route.params.country}/>
     )
